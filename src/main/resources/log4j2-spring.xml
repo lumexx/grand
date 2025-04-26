@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<SpringProfile name="!local">
+		<Appenders>
+			<Console name="Console" target="SYSTEM_OUT" follow="true">
+				<JsonTemplateLayout eventTemplateUri="classpath:EcsLayout.json">
+					<EventTemplateAdditionalField key="timeMillis" format="JSON" value='{"$resolver": "timestamp", "epoch": {"unit": "millis", "rounded": true}}'/>
+				</JsonTemplateLayout>
+			</Console>
+		</Appenders>
+		<Loggers>
+			<Root level="INFO">
+				<AppenderRef ref="Console"/>
+			</Root>
+		</Loggers>
+	</SpringProfile>
+
+</Configuration>
