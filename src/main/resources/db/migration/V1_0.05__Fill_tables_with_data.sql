@@ -10,8 +10,8 @@ BEGIN
     VALUES (uuid_generate_v4(), name_val, birthday_val, '$2a$12$0NHkuefxVB/cr4qZE9gO7.ZaqV4fiNqQByOdpWhM3u7PkdgZJE96C')
     RETURNING id INTO user_id_val;
 
-    INSERT INTO account (uuid, user_id, balance)
-    VALUES (uuid_generate_v4(), user_id_val, balance_val);
+    INSERT INTO account (uuid, user_id, balance, initial_balance)
+    VALUES (uuid_generate_v4(), user_id_val, balance_val, balance_val);
 
     INSERT INTO email_data (uuid, user_id, email)
     VALUES (uuid_generate_v4(), user_id_val, email_val);

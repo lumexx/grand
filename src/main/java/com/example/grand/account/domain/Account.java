@@ -26,4 +26,9 @@ public class Account extends BaseEntity {
     @Column(name = "balance")
     private BigDecimal balance;
 
+    @NotNull
+    @PositiveOrZero
+    @Column(name = "initial_balance")
+    private BigDecimal initialBalance;
+
 }

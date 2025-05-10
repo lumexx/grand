@@ -7,11 +7,13 @@ import com.example.grand.account.repository.ProfitDataRedisRepository;
 import com.example.grand.common.Constant;
 import com.example.grand.utils.NumberUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class BalanceMultiplier {
 
     private final ProfitDataRedisRepository profitDataRedisRepository;
     private final AccountRepository accountRepository;
+    private final CacheManager cacheManager;
 
     @Scheduled(cron = "0/30 * * * * *")
     private void updateBalance() {
@@ -41,12 +44,21 @@ public class BalanceMultiplier {
     }
 
     private ProfitData getOrCreateProfitData(Account account) {
-        return profitDataRedisRepository.findByAccountId(account.getId())
-                .orElseGet(() -> {
-                    ProfitData profitData = new ProfitData(account.getId(), calculateMaxProfit(account.getBalance()));
-                    profitDataRedisRepository.save(profitData);
-                    return profitData;
-                });
+        Optional<ProfitData> cached = profitDataRedisRepository.findByAccountId(account.getId());
+
+        if (cached.isPresent()) {
+            return cached.get();
+        } else {
+            ProfitData profitData = new ProfitData(account.getId(), calculateMaxProfit(account.getInitialBalance()));
+            evictProfitDataCache(account.getId());
+            profitDataRedisRepository.save(profitData);
+            return profitData;
+        }
+    }
+
+    private void evictProfitDataCache(Long accountId) {
+        cacheManager.getCache("profitDataCache") // название кэша должно совпадать
+                .evict(accountId);
     }
 
     private BigDecimal calculateGain(BigDecimal currentBalance) {
