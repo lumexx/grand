@@ -11,4 +11,6 @@ public interface EmailDataRepository extends JpaRepository<EmailData, Long> {
 
     Optional<EmailData> findByUuidAndUserUuid(UUID emailUuid, UUID userUuid);
 
+    long countByUserUuid(UUID userUuid);
+
 }

@@ -59,14 +59,11 @@ public class PhoneServiceImpl implements PhoneService {
     @Override
     @Transactional
     public void delete(UUID phoneUuid) {
+        phoneDataValidator.validateDeletePhoneData(jwtService.getUser().getUuid());
+
         PhoneData entity = findPhoneDataByUuidAndUserUuid(phoneUuid, jwtService.getUser().getUuid());
 
         phoneDataRepository.deleteById(entity.getId());
-    }
-
-    private User findAndValidateUser(UUID userUuid) {
-        return userRepository.findByUuid(userUuid)
-                .orElseThrow(() -> new RestAPIException(ExceptionType.USER_NOT_FOUND));
     }
 
     private PhoneData findPhoneDataByUuidAndUserUuid(UUID phoneUuid, UUID userUuid) {

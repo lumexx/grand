@@ -57,6 +57,8 @@ public class EmailServiceImpl implements EmailService {
     @Override
     @Transactional
     public void delete(UUID emailUuid) {
+        emailDataValidator.validateDeleteEmailData(jwtService.getUser().getUuid());
+
         EmailData entity = findEmailDataByUuidAndUserUuid(emailUuid, jwtService.getUser().getUuid());
 
         emailDataRepository.deleteById(entity.getId());

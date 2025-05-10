@@ -11,4 +11,6 @@ public interface PhoneDataRepository extends JpaRepository<PhoneData, Long> {
 
     Optional<PhoneData> findByUuidAndUserUuid(UUID phoneUuid, UUID userUuid);
 
+    long countByUserUuid(UUID userUuid);
+
 }
