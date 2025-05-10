@@ -8,11 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
-
-    Optional<User> findByUuid(UUID uuid);
 
     @Query("SELECT u FROM User u JOIN u.emails e WHERE e.email IN :emails")
     Optional<User> findByEmailIn(@Param("emails") List<String> emails);

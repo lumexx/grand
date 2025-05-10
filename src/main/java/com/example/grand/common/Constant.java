@@ -28,4 +28,6 @@ public final class Constant {
 
     public static final int DECIMAL_COUNT = 10;
 
+    public static final String PROFIT_DATA_CACHE = "profitDataCache";
+
 }

@@ -57,8 +57,7 @@ public class BalanceMultiplier {
     }
 
     private void evictProfitDataCache(Long accountId) {
-        cacheManager.getCache("profitDataCache") // название кэша должно совпадать
-                .evict(accountId);
+        cacheManager.getCache(Constant.PROFIT_DATA_CACHE).evict(accountId);
     }
 
     private BigDecimal calculateGain(BigDecimal currentBalance) {
